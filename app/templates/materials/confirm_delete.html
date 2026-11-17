@@ -1,0 +1,23 @@
+{% extends "materials/list.html" %}
+{% block overlay %}
+    <dialog class="confirm-dialog"
+            open
+            data-confirm-dialog
+            aria-labelledby="confirm-title"
+            aria-describedby="confirm-description"
+            data-cancel-url="{% url 'materials:mine' %}">
+        <form class="stack confirm-card"
+            method="post"
+            action="{% url 'materials:delete' material.pk %}">
+            {% csrf_token %}
+            <h2 id="confirm-title">Удалить материал?</h2>
+            <p class="muted" id="confirm-description">
+                «{{ material.title }}» больше не будет доступен студентам. Это действие нельзя отменить.
+            </p>
+            <div class="actions">
+                <a class="btn btn-secondary" href="{% url 'materials:mine' %}" autofocus>Отмена</a>
+                <button class="btn btn-danger" type="submit">Удалить</button>
+            </div>
+        </form>
+    </dialog>
+{% endblock %}

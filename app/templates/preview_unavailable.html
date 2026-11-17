@@ -1,0 +1,16 @@
+{% extends "document.html" %}
+{% block title %}
+    Предпросмотр интерфейса
+{% endblock %}
+{% block body_class %}
+    login-page
+{% endblock %}
+{% block body %}
+    <main class="card stack login-card">
+        <h1>Это предпросмотр</h1>
+        <p class="muted">
+            Серверная логика ещё не подключена. Вход, сохранение, блокировка, удаление и скачивание документов здесь не выполняются. Данные не изменены.
+        </p>
+        <a class="btn btn-secondary" href="/">К экрану входа</a>
+    </main>
+{% endblock %}

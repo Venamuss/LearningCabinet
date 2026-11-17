@@ -1,0 +1,61 @@
+{% for item in materials %}
+    <article class="card material-card">
+        <div class="material-type{% if item.external_url %} material-type-link{% endif %}">
+            {{ item.type_label }}
+        </div>
+        <div class="material-description">
+            <h2>{{ item.title }}</h2>
+            <p class="hint">
+                {{ item.subject }} /
+                {% if request.user.role == "teacher" %}
+                    {{ item.group_name }}
+                {% else %}
+                    {{ item.teacher_name }}
+                {% endif %}
+            </p>
+            <p class="hint">{{ item.created_at|date:'d.m.Y' }} / {{ item.source_label }}</p>
+        </div>
+        <div class="actions material-actions">
+            {% if request.user.role == "teacher" %}
+                <a class="btn btn-secondary btn-compact edit-material"
+                   href="{% url 'materials:edit' item.pk %}">
+                    Изменить
+                </a>
+                <a class="btn btn-danger btn-compact delete-material"
+                   href="{% url 'materials:delete' item.pk %}">
+                    Удалить
+                </a>
+            {% elif item.media_kind == "audio" or item.media_kind == "video" %}
+                <a class="btn btn-secondary material-open"
+                   href="{% url 'materials:detail' item.pk %}">
+                    Открыть плеер
+                </a>
+            {% elif item.external_url %}
+                <a class="btn btn-secondary material-open"
+                   href="{{ item.external_url }}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Открыть ссылку
+                </a>
+            {% else %}
+                <a class="btn btn-secondary material-open"
+                   href="{% url 'materials:content' item.pk %}?download=1">
+                    Скачать {{ item.type_label }}
+                </a>
+            {% endif %}
+        </div>
+    </article>
+{% empty %}
+    <section class="card empty-state">
+        <h2>Материалов пока нет</h2>
+        <p class="muted">
+            По выбранной дисциплине ещё нет публикаций. Попробуйте выбрать другую дисциплину.
+        </p>
+        <div>
+            <a class="btn btn-secondary"
+               href="{% if request.user.role == 'teacher' %}{% url 'materials:mine' %}{% else %}{% url 'materials:list' %}{% endif %}">
+                Все дисциплины
+            </a>
+        </div>
+    </section>
+{% endfor %}

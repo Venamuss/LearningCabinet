@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block referrer_policy %}
+    no-referrer
+{% endblock %}
+{% block main_class %}
+    media-page
+{% endblock %}
+{% block content %}
+    <article class="card stack media-card">
+        {% if material.media_kind == "video" or material.media_kind == "audio" %}
+            <div class="stack" data-player>
+                {% if material.media_kind == "video" %}
+                    <video controls
+                        preload="metadata"
+                        playsinline
+                        data-media
+                        aria-label="{{ material.title }}"
+                        src="{{ media_src }}"{% if poster_src %} poster="{{ poster_src }}"{% endif %}>
+                    </video>
+                {% else %}
+                    <div class="audio-shell">
+                        <p>
+                            Аудио /
+                            {% if material.file_path %}
+                                загруженный файл
+                            {% else %}
+                                прямая медиассылка
+                            {% endif %}
+                        </p>
+                        <audio controls
+                            preload="metadata"
+                            data-media
+                            aria-label="{{ material.title }}"
+                            src="{{ media_src }}">
+                        </audio>
+                    </div>
+                {% endif %}
+                <p class="notice notice-error media-error"
+                data-media-error
+                hidden
+                role="alert">
+                    Не удалось воспроизвести материал. Источник может быть недоступен или формат не поддерживается браузером. Используйте действие ниже.
+                </p>
+            </div>
+            <p class="hint">
+                {% if material.file_path %}
+                    Источник: защищённый {{ material.type_label }}, {{ material.source_label }}. Доступ проверяется при каждом запросе фрагмента файла.
+                {% else %}
+                    Браузер получает
+                    {% if material.media_kind == "audio" %}
+                        аудио
+                    {% else %}
+                        видео
+                    {% endif %}
+                    напрямую от внешнего источника. Если источник недоступен, появится сообщение.
+                {% endif %}
+            </p>
+            <p class="hint">Автозапуск выключен. Для начала нажмите «Воспроизвести».</p>
+        {% else %}
+            <h2>{{ material.title }}</h2>
+            <p class="preserve-lines">{{ material.description }}</p>
+        {% endif %}
+        <div class="actions">
+            <a class="btn btn-secondary back-materials"
+            href="{% if request.user.role == 'teacher' %}{% url 'materials:mine' %}{% else %}{% url 'materials:list' %}{% endif %}">
+                К материалам
+            </a>
+            {% if material.file_path %}
+                <a class="btn btn-secondary download-material"
+                href="{% url 'materials:content' material.pk %}?download=1">
+                    Скачать {{ material.type_label }}
+                </a>
+            {% else %}
+                <a class="btn btn-secondary download-material"
+                href="{{ material.external_url }}"
+                target="_blank"
+                rel="noopener noreferrer">
+                    Открыть источник
+                </a>
+            {% endif %}
+        </div>
+    </article>
+{% endblock %}

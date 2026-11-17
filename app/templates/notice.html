@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <section class="card stack form-card">
+        <h2>{{ notice_title }}</h2>
+        <p class="muted">{{ notice_description }}</p>
+        <div>
+            <a class="btn btn-secondary" href="{% url 'home' %}">На главную</a>
+        </div>
+    </section>
+{% endblock %}

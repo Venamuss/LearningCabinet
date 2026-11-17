@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block heading_actions %}
+    <a class="btn btn-primary add-weekly"
+       href="{% url 'academics:weekly_create' %}">
+        + Занятие шаблона
+    </a>
+{% endblock %}
+{% block content %}
+    <section class="card stack base-settings">
+        <div class="settings-row">
+            <form class="group-settings" method="get">
+                {% include "includes/field.html" with field=filter_form.group %}
+                <button class="btn btn-secondary btn-compact group-submit" type="submit">
+                    Показать
+                </button>
+            </form>
+            <form class="anchor-settings"
+                  method="post"
+                  action="{% url 'academics:schedule_settings' %}">
+                {% csrf_token %}
+                {% include "includes/form_errors.html" with form=settings_form %}
+                {% include "includes/field.html" with field=settings_form.week1_monday %}
+                <button class="btn btn-secondary save-settings" type="submit">
+                    Сохранить настройку
+                </button>
+            </form>
+        </div>
+        <p class="hint">
+            Недели 1 и 2 чередуются непрерывно. Начало нового месяца не сбрасывает тип недели.
+        </p>
+    </section>
+    <div class="table-wrap">
+        <table class="responsive-table weekly-table">
+            <caption class="sr-only">
+                Занятия базовых недель
+            </caption>
+            <colgroup>
+                <col style="width:8.5%">
+                <col style="width:15.6%">
+                <col style="width:18.6%">
+                <col style="width:34%">
+                <col style="width:8.5%">
+                <col style="width:14.8%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">Неделя</th>
+                    <th scope="col">День</th>
+                    <th scope="col">Время</th>
+                    <th scope="col">Дисциплина / преподаватель</th>
+                    <th scope="col">Ауд.</th>
+                    <th scope="col">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lesson in weekly_lessons %}
+                    <tr>
+                        <td data-label="Неделя">{{ lesson.week_type }}</td>
+                        <td data-label="День">{{ lesson.get_weekday_display }}</td>
+                        <td data-label="Время">
+                            {{ lesson.start_time|time:'H:i' }} - {{ lesson.end_time|time:'H:i' }}
+                        </td>
+                        <td data-label="Дисциплина / преподаватель">
+                            {{ lesson.subject }} / {{ lesson.teacher_name }}
+                        </td>
+                        <td data-label="Аудитория">{{ lesson.room }}</td>
+                        <td data-label="Действие">
+                            <a class="btn btn-secondary btn-compact user-edit"
+                               href="{% url 'academics:weekly_edit' lesson.pk %}">
+                                Изменить
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">Базовое расписание пока не заполнено.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <a class="btn btn-secondary back-schedule"
+           href="{% url 'academics:manage_schedule' %}">
+            К расписанию на дату
+        </a>
+    </div>
+{% endblock %}

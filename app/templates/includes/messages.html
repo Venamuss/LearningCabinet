@@ -1,0 +1,6 @@
+{% for message in messages %}
+    <p class="notice{% if message.tags == 'error' %} notice-error{% elif message.tags == 'warning' %} notice-warning{% endif %}"
+       role="status">
+        {{ message }}
+    </p>
+{% endfor %}

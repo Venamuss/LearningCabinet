@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block heading_actions %}
+    <a class="btn btn-primary add-user"
+       href="{% url 'accounts:user_create' %}">
+        + Добавить пользователя
+    </a>
+{% endblock %}
+{% block content %}
+    <p class="notice">
+        Блокировка временно прекращает доступ и сеансы, но сохраняет данные. Администратор может снять её.
+    </p>
+    <div class="table-wrap">
+        <table class="responsive-table users-table">
+            <caption class="sr-only">
+                Учётные записи
+            </caption>
+            <colgroup>
+                <col style="width:19.4%">
+                <col style="width:15.7%">
+                <col style="width:13.9%">
+                <col style="width:15.7%">
+                <col style="width:35.3%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">Имя и логин</th>
+                    <th scope="col">Роль</th>
+                    <th scope="col">Группа</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in users %}
+                    <tr>
+                        <td data-label="Имя и логин">
+                            {{ account.full_name }}
+                            <br>
+                            {{ account.username }}
+                        </td>
+                        <td data-label="Роль">{{ account.get_role_display }}</td>
+                        <td data-label="Группа">
+                            {{ account.study_group.name|default:'Не назначается' }}
+                        </td>
+                        <td data-label="Статус">
+                            <span class="badge{% if not account.is_active %} badge-orange{% endif %}">
+                                {% if account.is_active %}
+                                    Активен
+                                {% else %}
+                                    Заблокирован
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td data-label="Действия">
+                            <div class="actions table-actions">
+                                <a class="btn btn-secondary btn-compact user-edit"
+                                   href="{% url 'accounts:user_edit' account.pk %}">
+                                    Изменить
+                                </a>
+                                <form method="post"
+                                      action="{% if account.is_active %}{% url 'accounts:block' account.pk %}{% else %}{% url 'accounts:unblock' account.pk %}{% endif %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-compact user-status {% if account.is_active %}btn-danger{% else %}btn-secondary{% endif %}"
+                                            type="submit">
+                                        {% if account.is_active %}
+                                            Блокировать
+                                        {% else %}
+                                            Разблокировать
+                                        {% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">Пользователей пока нет.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p class="hint">
+        После разблокировки нужен новый вход. Учётная запись, назначения и публикации не удаляются.
+    </p>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="card stack form-card"
+          method="post"
+          enctype="multipart/form-data"
+          data-material-form>
+        {% csrf_token %}
+        {% include "includes/form_errors.html" %}
+        {% include "includes/field.html" with field=form.assignment %}
+        {% include "includes/field.html" with field=form.title %}
+        {% include "includes/field.html" with field=form.description %}
+        <fieldset class="source-fieldset stack">
+            <legend>
+                Источник материала
+                <span aria-hidden="true">*</span>
+            </legend>
+            <div class="source-switch" data-source-switch>{{ form.source_type }}</div>
+            {% if form.source_type.errors %}
+                <div class="field-error" role="alert">{{ form.source_type.errors }}</div>
+            {% endif %}
+            <div class="upload-panel stack{% if form.file.errors %} upload-error{% endif %}"
+                 data-source-panel="file">
+                <div class="field file-picker{% if form.file.errors %} has-error{% endif %}">
+                    <div class="file-picker-row">
+                        <label class="btn btn-secondary" for="{{ form.file.id_for_label }}">
+                            Выбрать файл
+                        </label>
+                        {{ form.file }}
+                        <span class="file-name muted" data-file-name>Файл не выбран</span>
+                    </div>
+                    {% if form.file.errors %}
+                        <div class="field-error" id="{{ form.file.auto_id }}_error" role="alert">
+                            {% for error in form.file.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                {% if material.file_path %}
+                    <p class="hint">
+                        Текущий файл: {{ material.original_file_name }}. Если новый файл не выбран, сохранится текущий.
+                    </p>
+                {% endif %}
+                <p class="hint">
+                    Документы: PDF, DOCX, PPTX, TXT. Медиа: MP4, WEBM, MP3, OGG, WAV. До 50 МБ включительно.
+                </p>
+                <p class="hint">Для аудио и видео плеер выбирается по проверенному типу файла.</p>
+            </div>
+            <div class="stack" data-source-panel="link">
+                {% include "includes/field.html" with field=form.media_kind %}
+                {% include "includes/field.html" with field=form.external_url %}
+            </div>
+        </fieldset>
+        <div class="actions">
+            <button class="btn btn-primary publish-material" type="submit">
+                {% if material %}
+                    Сохранить изменения
+                {% else %}
+                    Опубликовать
+                {% endif %}
+            </button>
+            <a class="btn btn-secondary cancel-button"
+               href="{% url 'materials:mine' %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+{% endblock %}

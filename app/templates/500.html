@@ -1,0 +1,16 @@
+{% extends "document.html" %}
+{% block title %}
+    Ошибка сервера
+{% endblock %}
+{% block body_class %}
+    login-page
+{% endblock %}
+{% block body %}
+    <main class="card stack login-card">
+        <h1>Ошибка сервера</h1>
+        <p class="muted">
+            Не удалось выполнить запрос. Попробуйте позже. Если ошибка повторится, обратитесь к администратору.
+        </p>
+        <a class="btn btn-secondary" href="/">На главную</a>
+    </main>
+{% endblock %}

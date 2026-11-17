@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block heading_actions %}
+    {% if request.user.role == "teacher" %}
+        <a class="btn btn-primary add-material"
+           href="{% url 'materials:create' %}">
+            + Добавить материал
+        </a>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <form class="card filter-card" method="get">
+        <div class="filter-row">
+            <div class="material-filter">
+                {% if request.user.role == "teacher" %}
+                    {% include "includes/field.html" with field=filter_form.assignment %}
+                {% else %}
+                    {% include "includes/field.html" with field=filter_form.subject %}
+                {% endif %}
+            </div>
+            <button class="btn btn-secondary filter-submit" type="submit">Применить</button>
+        </div>
+        {% include "includes/form_errors.html" with form=filter_form %}
+    </form>
+    {% include "materials/includes/cards.html" %}
+    <p class="hint">
+        {% if request.user.role == "teacher" %}
+            Изменять и удалять можно только собственные публикации.
+        {% else %}
+            Материалы других групп в вашем кабинете не отображаются.
+        {% endif %}
+    </p>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "document.html" %}
+{% block body %}
+    <a class="skip-link" href="#main">К содержимому</a>
+    <header class="app-header">
+        {% include "includes/brand.html" %}
+        <div class="profile">
+            <span class="badge badge-gray profile-role">
+                {% if request.user.role == "admin" %}
+                    Управление приложением
+                {% else %}
+                    {{ request.user.get_role_display }}
+                    {% if request.user.role == "student" %}
+                        / {{ request.user.study_group.name }}
+                    {% endif %}
+                {% endif %}
+            </span>
+            <span class="profile-name">{{ request.user.full_name }}</span>
+            <button class="btn btn-secondary menu-toggle"
+                    type="button"
+                    data-menu-toggle
+                    aria-controls="app-sidebar"
+                    aria-expanded="false">
+                Меню
+            </button>
+            <form class="mobile-only"
+                  method="post"
+                  action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-quiet" type="submit">Выйти</button>
+            </form>
+        </div>
+    </header>
+    <div class="workspace">
+        <aside class="app-sidebar" id="app-sidebar">
+            <p class="nav-heading">
+                {% if request.user.role == "admin" %}
+                    АДМИНИСТРИРОВАНИЕ
+                {% else %}
+                    ЛИЧНЫЙ КАБИНЕТ
+                {% endif %}
+            </p>
+            <nav class="app-nav" aria-label="Основная навигация">
+                {% for item in nav_items %}
+                    <a href="{% url item.url_name %}"{% if item.active %} aria-current="page"{% endif %}>
+                        <span class="desktop-label">{{ item.label }}</span>
+                        <span class="mobile-label">
+                            {{ item.mobile_label|default:item.label }}
+                        </span>
+                    </a>
+                {% endfor %}
+            </nav>
+            <form class="sidebar-footer"
+                  method="post"
+                  action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-quiet" type="submit">Выйти</button>
+            </form>
+        </aside>
+        <main class="main {% block main_class %}{% endblock %}"
+              id="main"
+              tabindex="-1">
+            <div class="page-heading">
+                <div>
+                    <h1>
+                        <span class="desktop-label">{{ page_title }}</span>
+                        <span class="mobile-label">{{ mobile_title|default:page_title }}</span>
+                    </h1>
+                    {% if page_subtitle %}
+                        <p class="muted">
+                            <span class="desktop-label">{{ page_subtitle }}</span>
+                            <span class="mobile-label">
+                                {{ mobile_subtitle|default:page_subtitle }}
+                            </span>
+                        </p>
+                    {% endif %}
+                </div>
+                {% block heading_actions %}{% endblock %}
+            </div>
+            {% include "includes/messages.html" %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% block overlay %}{% endblock %}
+{% endblock %}

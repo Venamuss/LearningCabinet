@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="card filter-card" method="get">
+        <div class="filter-row">
+            <div class="date-filter">
+                {% include "includes/field.html" with field=filter_form.date %}
+            </div>
+            <button class="btn btn-secondary filter-submit" type="submit">Показать</button>
+        </div>
+        {% include "includes/form_errors.html" with form=filter_form %}
+    </form>
+    <div class="section-heading">
+        <h2>{{ date_heading }}</h2>
+        <span class="badge week-badge">Неделя {{ week_type }}</span>
+    </div>
+    {% if lessons %}
+        <div class="table-wrap schedule-table">
+            <table class="student-schedule">
+                <caption class="sr-only">
+                    {{ date_heading }}
+                </caption>
+                <colgroup>
+                    <col class="col-time">
+                    <col class="col-subject">
+                    <col class="col-person">
+                    <col class="col-room">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Время</th>
+                        <th scope="col">Дисциплина</th>
+                        <th scope="col">
+                            {% if request.user.role == "teacher" %}
+                                Группа
+                            {% else %}
+                                Преподаватель
+                            {% endif %}
+                        </th>
+                        <th scope="col">Аудитория</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lesson in lessons %}
+                        <tr>
+                            <td>
+                                {{ lesson.start_time|time:'H:i' }} - {{ lesson.end_time|time:'H:i' }}
+                            </td>
+                            <td>{{ lesson.subject }}</td>
+                            <td>
+                                {% if request.user.role == "teacher" %}
+                                    {{ lesson.group_name }}
+                                {% else %}
+                                    {{ lesson.teacher_name }}
+                                {% endif %}
+                            </td>
+                            <td>{{ lesson.room }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="schedule-cards">
+            {% for lesson in lessons %}
+                <article class="card schedule-card">
+                    <div>
+                        <span class="badge">
+                            {{ lesson.start_time|time:'H:i' }} -
+                            {{ lesson.end_time|time:'H:i' }}
+                        </span>
+                    </div>
+                    <h3>{{ lesson.subject }}</h3>
+                    <div class="lesson-meta">
+                        <span>
+                            {% if request.user.role == "teacher" %}
+                                {{ lesson.group_name }}
+                            {% else %}
+                                {{ lesson.teacher_name }}
+                            {% endif %}
+                        </span>
+                        <span>Ауд. {{ lesson.room }}</span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <section class="card empty-state">
+            <h2>Занятий нет</h2>
+            <p class="muted">На выбранную дату занятий не запланировано.</p>
+        </section>
+    {% endif %}
+    <p class="hint">
+        Основой служит расписание недели 1 или 2. Замены и отмены на
+        выбранную дату учитываются автоматически.
+    </p>
+{% endblock %}

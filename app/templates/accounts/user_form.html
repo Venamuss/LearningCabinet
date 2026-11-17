@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="card stack form-card" method="post" data-user-form>
+        {% csrf_token %}
+        {% include "includes/form_errors.html" %}
+        {% include "includes/field.html" with field=form.full_name %}
+        <div class="form-grid">
+            {% include "includes/field.html" with field=form.username %}
+            {% include "includes/field.html" with field=form.role %}
+        </div>
+        <div data-student-group>
+            {% include "includes/field.html" with field=form.study_group %}
+        </div>
+        {% include "includes/field.html" with field=form.password %}
+        <p class="notice">
+            Логин должен быть уникальным. Преподавателю с назначениями нельзя сменить роль.
+        </p>
+        <div class="actions">
+            <button class="btn btn-primary save-button" type="submit">Сохранить</button>
+            <a class="btn btn-secondary cancel-button"
+               href="{% url 'accounts:users' %}">
+                Отмена
+            </a>
+        </div>
+    </form>
+{% endblock %}

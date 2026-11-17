@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="reference-grid">
+        <section class="card stack">
+            <h2>Учебные группы</h2>
+            <form class="stack"
+                  method="post"
+                  action="{% url 'academics:group_create' %}">
+                {% csrf_token %}
+                {% include "includes/form_errors.html" with form=group_form %}
+                {% include "includes/field.html" with field=group_form.name %}
+                <div>
+                    <button class="btn btn-primary add-reference" type="submit">Добавить</button>
+                </div>
+            </form>
+            <div>
+                {% for group in groups %}
+                    <div class="reference-row">
+                        <span>{{ group.name }}</span>
+                        <a class="btn btn-secondary btn-compact user-edit"
+                           href="{% url 'academics:group_edit' group.pk %}">
+                            Изменить
+                        </a>
+                    </div>
+                {% empty %}
+                    <p class="muted">Группы пока не добавлены.</p>
+                {% endfor %}
+            </div>
+            <p class="hint">Название группы должно быть уникальным.</p>
+        </section>
+        <section class="card stack">
+            <h2>Дисциплины</h2>
+            <form class="stack"
+                  method="post"
+                  action="{% url 'academics:subject_create' %}">
+                {% csrf_token %}
+                {% include "includes/form_errors.html" with form=subject_form %}
+                {% include "includes/field.html" with field=subject_form.name %}
+                <div>
+                    <button class="btn btn-primary add-reference" type="submit">Добавить</button>
+                </div>
+            </form>
+            <div>
+                {% for subject in subjects %}
+                    <div class="reference-row">
+                        <span>{{ subject.name }}</span>
+                        <a class="btn btn-secondary btn-compact user-edit"
+                           href="{% url 'academics:subject_edit' subject.pk %}">
+                            Изменить
+                        </a>
+                    </div>
+                {% empty %}
+                    <p class="muted">Дисциплины пока не добавлены.</p>
+                {% endfor %}
+            </div>
+            <p class="hint">Запись с зависимыми данными нельзя удалить.</p>
+        </section>
+    </div>
+{% endblock %}

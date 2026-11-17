@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="card stack lesson-form" method="post" data-dated-form>
+        {% csrf_token %}
+        {% include "includes/form_errors.html" %}
+        <div class="form-grid">
+            {% include "includes/field.html" with field=form.action %}
+            <div data-template-field>
+                {% include "includes/field.html" with field=form.weekly_lesson %}
+            </div>
+        </div>
+        <div data-lesson-values>
+            {% include "includes/field.html" with field=form.assignment %}
+        </div>
+        {% include "includes/field.html" with field=form.date %}
+        <div class="form-grid form-grid-three" data-lesson-values>
+            {% include "includes/field.html" with field=form.start_time %}
+            {% include "includes/field.html" with field=form.end_time %}
+            {% include "includes/field.html" with field=form.room %}
+        </div>
+        <p class="hint">
+            Для отмены выбирается базовое занятие, а время и аудитория не заполняются. Шаблон недели не изменяется.
+        </p>
+        <div class="actions">
+            <button class="btn btn-primary save-lesson" type="submit">Сохранить занятие</button>
+            <a class="btn btn-secondary cancel-button"
+               href="{% url 'academics:manage_schedule' %}">
+                Отмена
+            </a>
+            {% if lesson %}
+                <a class="btn btn-danger"
+                   href="{% url 'academics:dated_delete' lesson.pk %}">
+                    Удалить изменение
+                </a>
+            {% endif %}
+        </div>
+        <p class="hint">
+            Удаление изменения вернёт базовое занятие. Чтобы отменить само занятие на дату, выберите действие «Отменить».
+        </p>
+    </form>
+{% endblock %}

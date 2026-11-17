@@ -1,0 +1,27 @@
+{% extends "document.html" %}
+{% block body_class %}
+    login-page
+{% endblock %}
+{% block body %}
+    <main class="card stack login-card">
+        {% include "includes/brand.html" %}
+        <div class="login-heading">
+            <h1>Вход в кабинет</h1>
+            <p class="muted">Расписание и материалы вашей группы.</p>
+        </div>
+        <form class="stack login-form"
+              method="post"
+              action="{% url 'accounts:login' %}">
+            {% csrf_token %}
+            {% include "includes/form_errors.html" %}
+            {% include "includes/field.html" with field=form.username %}
+            {% include "includes/field.html" with field=form.password %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+            <button class="btn btn-primary" type="submit">Войти</button>
+        </form>
+        <p class="hint">Не получается войти? Обратитесь к администратору.</p>
+    </main>
+    <p class="hint login-footer">Учебный кабинет / колледж</p>
+{% endblock %}
