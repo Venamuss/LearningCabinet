@@ -547,6 +547,137 @@ input[type='file']::file-selector-button
     border-color: var(--uk-red) !important;
 }
 
+.time-picker
+{
+    position: relative;
+    min-width: 0;
+}
+
+.field .time-picker input
+{
+    padding-right: 48px;
+    font-variant-numeric: tabular-nums;
+}
+
+.time-picker-toggle
+{
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 0;
+    border-radius: 0 5px 5px 0;
+    color: var(--uk-green);
+    background: transparent;
+}
+
+.time-picker-toggle:hover
+{
+    background: var(--uk-soft);
+}
+
+.time-picker-toggle::before
+{
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+}
+
+.time-picker-toggle::after
+{
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    width: 5px;
+    height: 6px;
+    border-left: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+}
+
+.time-picker-panel
+{
+    position: fixed;
+    inset: auto;
+    width: min(272px, calc(100vw - 32px));
+    margin: 0;
+    padding: 18px;
+    border: 1px solid var(--uk-line);
+    border-radius: 8px;
+    background: var(--uk-white);
+    color: var(--uk-text);
+    box-shadow: 0 8px 24px rgb(36 51 44 / 12%);
+    font: inherit;
+}
+
+.time-picker-panel:popover-open
+{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.time-picker-panel:not(:popover-open)
+{
+    display: none;
+}
+
+.time-picker-heading
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-weight: 500;
+}
+
+.time-picker-parts
+{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: end;
+    gap: 10px;
+}
+
+.time-picker-part
+{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.time-picker-part select
+{
+    font-variant-numeric: tabular-nums;
+}
+
+.time-picker-separator
+{
+    display: grid;
+    align-items: center;
+    height: 44px;
+    color: var(--uk-muted);
+}
+
+.time-picker-panel .actions
+{
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.time-picker-panel .btn
+{
+    flex: 1;
+}
+
 .field-error,
 .errorlist
 {

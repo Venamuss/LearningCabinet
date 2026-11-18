@@ -13,6 +13,7 @@
                 <button class="btn btn-secondary btn-compact group-submit" type="submit">
                     Показать
                 </button>
+                {% include "includes/form_errors.html" with form=filter_form %}
             </form>
             <form class="anchor-settings"
                   method="post"

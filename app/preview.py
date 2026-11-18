@@ -13,6 +13,8 @@ from django.shortcuts import redirect, render
 from django.urls import include, path, reverse
 from django.views.static import serve
 
+from app.academics.widgets import TimeInput24
+
 ROOT = Path(__file__).resolve().parent
 GROUPS = [("1", "1ИСиП-24"), ("2", "1ИСиП-25")]
 SUBJECTS = [
@@ -627,12 +629,8 @@ def context_for(screen, request):
                     else ""
                 ),
             ),
-            "start_time": field(
-                "Начало", widget=forms.TimeInput(attrs={"type": "time"})
-            ),
-            "end_time": field(
-                "Окончание", widget=forms.TimeInput(attrs={"type": "time"})
-            ),
+            "start_time": field("Начало", widget=TimeInput24()),
+            "end_time": field("Окончание", widget=TimeInput24()),
             "room": field("Аудитория"),
         }
         initial = {

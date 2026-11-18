@@ -1,0 +1,6 @@
+Django==5.2.19
+asgiref==3.13.0
+sqlparse==0.6.1
+pypdf==7.1.0
+mutagen==1.48.1
+defusedxml==0.7.1
