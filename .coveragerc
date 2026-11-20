@@ -1,0 +1,24 @@
+[run]
+branch = True
+source =
+    app/accounts
+    app/academics
+    app/materials
+    app/config
+omit =
+    */tests/*
+    */migrations/*
+    */test_settings.py
+    */wsgi.py
+data_file = app/var/test-reports/.coverage
+
+[report]
+show_missing = True
+skip_empty = True
+precision = 1
+
+[json]
+output = app/var/test-reports/coverage.json
+
+[html]
+directory = app/var/test-reports/html

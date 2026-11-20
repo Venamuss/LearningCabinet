@@ -36,3 +36,15 @@ python3 -m venv .venv
 База SQLite и загруженные файлы сохраняются в `app/var/` и не попадают в Git.
 
 Другие экраны: `/student/schedule/`, `/materials/`, `/teacher/materials/`, `/manage/users/`, `/manage/schedule/`, `/manage/references/`, `/manage/assignments/`.
+
+## Тестирование
+
+```sh
+.venv/bin/python -m pip install -r app/requirements-test.txt
+.venv/bin/python app/manage.py test accounts academics materials --settings=config.test_settings --noinput
+```
+
+Тесты используют временную БД и временные файлы. Подробности и покрытие:
+[app/TESTING.md](app/TESTING.md).
+
+Ручные проверки: [docs/Тестирование_приложения.docx](docs/Тестирование_приложения.docx).
