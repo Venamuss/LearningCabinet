@@ -16,5 +16,5 @@ urlpatterns = [
         "manage/users/<int:pk>/unblock/",
         partial(views.block, blocked=False),
         name="unblock",
-    ),
+    )
 ]
